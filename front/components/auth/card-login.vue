@@ -53,7 +53,13 @@ export default {
       auth: {
         email: '',
         password: ''
-      }
+      },
+      ValidateEmail: [
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+      ],
+      validatePassword: [
+        v => !v || v.length >= 6 || 'Password must have min 6 chars'
+      ]
     }
   },
   methods: {

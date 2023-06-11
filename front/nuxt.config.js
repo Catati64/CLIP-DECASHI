@@ -54,13 +54,12 @@ export default {
       '@nuxtjs/firebase',
       {
         config: {
-          apiKey: 'AIzaSyCb2Qhp3-5TFPKvVRSpuuVze0tG_KafA6A',
-          authDomain: 'clip-decashi-a4ad4.firebaseapp.com',
-          projectId: 'clip-decashi-a4ad4',
-          storageBucket: 'clip-decashi-a4ad4.appspot.com',
-          messagingSenderId: '71394002334',
-          appId: '1:71394002334:web:c91febafff97595e44028f',
-          measurementId: 'G-60MVWW21ZL'
+          apiKey: 'AIzaSyCsLPXUTS6etIOsKzqI2j_SpIplAymOBKg',
+          authDomain: 'clip-decashi-c55dd.firebaseapp.com',
+          projectId: 'clip-decashi-c55dd',
+          storageBucket: 'clip-decashi-c55dd.appspot.com',
+          messagingSenderId: '1060202572692',
+          appId: '1:1060202572692:web:25f1e8de1f03c446713d81'
         },
         services: {
           auth: {
