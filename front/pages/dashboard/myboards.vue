@@ -6,19 +6,13 @@
 
 <script>
 
-import tablaProductos from '~/components/PrincipalTable.vue.js'
+import tablaProductos from '~/components/principal-table.vue'
 
 export default {
   name: 'IndexPage',
   components: {
     tablaProductos
   },
-  layout: 'general',
-  mounted () {
-    const datoEmail = sessionStorage.getItem('email')
-    if (!datoEmail) {
-      this.$router.push('/')
-    }
-  }
+  layout: 'general'
 }
 </script>
