@@ -16,6 +16,12 @@
         </v-icon>
         States
       </v-btn>
+      <v-btn color="#002B5B" class="button-50" @click="logOut">
+        <v-icon style="padding-right: 0.2em;">
+          mdi-logout-variant
+        </v-icon>
+        Logout
+      </v-btn>
     </nav>
     <v-dialog
       v-model="tagsDialog"
@@ -75,6 +81,9 @@ export default {
     },
     statesMethod () {
       this.$router.push('/auth/register')
+    },
+    logOut () {
+      this.$router.push('/auth/signout')
     }
   }
 }
