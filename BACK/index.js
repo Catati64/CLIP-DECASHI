@@ -35,8 +35,7 @@ app.use(cors(corsOptions))
 
 // ---------- >>>> Routes <<<< ----------
 
-// ADD USER
-
+// Sign Up
 app.post('/SignUp', (req, res) => {
 	const { email, password, name, lastname, number } = req.body
 
@@ -105,6 +104,7 @@ app.post('/SignUp', (req, res) => {
 
 })
 
+// Sign In
 app.post('/SignIn', (req, res) => {
     const { email, password } = req.body
     
@@ -138,8 +138,28 @@ app.post('/SignIn', (req, res) => {
     })
 })
 
+// New Task
 
+app.post('/NewTask', (req, res) => {
 
+    // tenemos que recibir el valor del id a modo de string o nos da error
+    const {email, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const sendData = {
+        description, startDate, finDate, priority, state, tags, notes
+    }
+    const coleccion = collection(db, "Users")
+    const documento = doc(coleccion, email)
+    const coleccioninner = collection(documento, "Tasks")
+    addDoc(coleccioninner, sendData).then(() => {
+        res.json({
+            'alert' : 'success c:'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
 
 // Server Port
 const PORT = process.env.PORT || 12000
