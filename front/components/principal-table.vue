@@ -15,26 +15,6 @@
           {{ item.priority }}
         </v-chip>
       </template>
-      <template #[`header.state`]="{ header }">
-        <div class="header-button">
-          <v-btn icon>
-            <v-icon style="padding-top: 0.6em;">
-              mdi-plus
-            </v-icon>
-          </v-btn>
-          <span class="header-text" style="padding-top: 1.5em;">{{ header.text }}</span>
-        </div>
-      </template>
-      <template #[`header.tags`]="{ header }">
-        <div class="header-button">
-          <v-btn icon>
-            <v-icon style="padding-top: 0.6em;">
-              mdi-plus
-            </v-icon>
-          </v-btn>
-          <span class="header-text" style="padding-top: 1.5em;">{{ header.text }}</span>
-        </div>
-      </template>
     </v-data-table>
     <div class="add-task-button">
       <v-btn block @click="NewTaskDialog = true">
