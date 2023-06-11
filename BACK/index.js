@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const cors = require ('cors')
 const { getFirestore, collection, setDoc, getDoc, doc, getDocs, updateDoc, deleteDoc, addDoc, Timestamp, query, where, orderBy} = require('firebase/firestore')
 const { initializeApp } = require('firebase/app')
+const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth')
 
 require('dotenv/config')
 
@@ -19,6 +20,9 @@ const firebaseConfig = {
 // // Initialize Firebase
 const firebase = initializeApp(firebaseConfig)
 const db = getFirestore()
+
+// Initialize FireAuth
+const auth = getAuth(firebase)
 
 // // Initialize server
 		const app = express()
@@ -37,71 +41,36 @@ app.use(cors(corsOptions))
 
 // Sign Up
 app.post('/SignUp', (req, res) => {
-	const { email, password, name, lastname, number } = req.body
+	const { email, password } = req.body
 
-	if (!email || !password || !name || !lastname || !number) {
-			res.json({
-					'alert' : 'not enough data'
-			})
-			return
+	if (!email || !password) {
+		res.json({
+			'alert' : 'not enough data'
+		})
+		return
 	}
-
-			// Validaciones
-			if(name.length < 3) {
-					res.json({
-							'alert': 'Name requires min 3 characters'
-					})
-			} else if (lastname.length < 3) {
-					res.json({
-							'alert': 'Lastname requires min 3 characters'
-					})
-			} else if (!email.length) {
-					res.json({
-							'alert': 'You must enter an email'
-					})
-			} else if (password.length < 8) {
-					res.json({
-							'alert': 'The password must have a min of 8 characters'
-					})
-			} else if (!Number(number) || !number.length === 10) {
-					res.json({
-							'alert': 'Please enter a valid number'
-					})
-			} else {
-					const Users = collection(db, "Users")
-	
-					getDoc(doc(Users, email)).then(User => {
-							if(User.exists()) {
-									res.json({
-											'alert': 'The mail already exists in the DB'
-									})
-							} else {
-									bcrypt.genSalt(10, (err, salt) => {
-											bcrypt.hash(password, salt, (err, hash) => {
-													sendData = {
-															email,
-															password: hash,
-															name,
-															lastname,
-															number
-													}
-	
-													// Guardar en DB
-													setDoc(doc(Users, email), sendData).then(() => {
-															res.json({
-																	'alert': 'success'
-															})
-													}).catch((error) => {
-															res.json({
-																	'alert': error
-															})
-													})
-											})
-									})
-							}
-					})
-			}
-
+	// Validaciones
+	if (!email.length) {
+		res.json({
+			'alert': 'You must enter an email'
+		})
+	} else if (password.length < 8) {
+		res.json({
+			'alert': 'The password must have a min of 8 characters'
+		})
+	} else {
+		createUserWithEmailAndPassword(auth, email, password)
+			.then(() => {
+				res.json({
+					'alert' : 'User has been created'
+				})
+			})
+			.catch((error) => {
+				res.json({
+					'alert' : 'Error creating user '
+				})
+			})
+	}
 })
 
 // New Task
