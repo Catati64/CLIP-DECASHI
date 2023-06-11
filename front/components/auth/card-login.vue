@@ -65,7 +65,7 @@ export default {
           that.snackbar = true
         }).then((user) => {
           // hope this works as a sign in
-          this.$router.push('/')
+          this.$router.push('/dashboard/myboards')
         })
     }
   }
