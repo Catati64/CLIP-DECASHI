@@ -43,6 +43,7 @@ app.use(cors(corsOptions))
 app.post('/SignUp', (req, res) => {
 	const { email, password } = req.body
 
+
 	if (!email || !password) {
 		res.json({
 			'alert' : 'not enough data'
@@ -195,7 +196,6 @@ app.post('/NewTag', async (req, res) => {
       res.status(500).json({ mensaje: 'Error al registrar las etiquetas' });
     }
   });
-
 
 // Server Port
 const PORT = process.env.PORT || 12000
