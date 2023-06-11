@@ -55,7 +55,7 @@
           <v-btn color="primary" text @click="saveTask">
             Add
           </v-btn>
-          <v-btn color="secondary" text @click="NewTaskDialog = false">
+          <v-btn color="secondary" text @click="closeNewTask">
             Cancel
           </v-btn>
         </v-card-actions>
@@ -69,7 +69,6 @@
 export default {
   data () {
     return {
-      NewTaskDialog: false,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Description', value: 'description' },
@@ -89,12 +88,49 @@ export default {
         tags: '',
         notes: ''
       },
+      NewTaskDialog: false,
       items: []
     }
   },
   methods: {
-    saveTask () {
-      console.log('JEJE')
+
+    async saveTask () {
+      const userid = this.$fire.auth.currentUser.uid
+      console.log(userid)
+      const idtask = this.newTask.description
+      const description = this.newTask.description
+      const startDate = this.newTask.startDate
+      const endDate = this.newTask.endDate
+      const priority = this.newTask.priority
+      const state = this.newTask.state
+      const tags = this.newTask.tags
+      const notes = this.newTask.notes
+      try {
+        await this.$axios.post('/NewTask', { userid, idtask, description, startDate, endDate, priority, state, tags, notes }).then((res) => {
+          console.log(res)
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al crear tarea', error)
+      }
+      this.closeNewTask()
+    },
+    clearNewTask () {
+      this.newTask = {
+        description: '',
+        startDate: null,
+        endDate: null,
+        priority: null,
+        state: null,
+        tags: '',
+        notes: ''
+      }
+    },
+    closeNewTask () {
+      this.NewTaskDialog = false
+      this.clearNewTask()
     },
     getPriorityColor (priority) {
       switch (priority) {
@@ -178,7 +214,7 @@ export default {
 
 .v-text-field.theme--dark .v-input__control,
 .v-text-field.theme--dark .v-input__slot {
-  background-color: #444444;
+  background-color: none;
   color: #ffffff;
 }
 

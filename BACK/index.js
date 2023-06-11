@@ -79,9 +79,9 @@ app.post('/SignUp', (req, res) => {
 app.post('/NewTask', (req, res) => {
 
     // tenemos que recibir el valor del id a modo de string o nos da error
-    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const {userid, idtask, description, startDate, endDate, priority, state, tags, notes } = req.body
     const sendData = {
-        idtask, description, startDate, finDate, priority, state, tags, notes
+        idtask, description, startDate, endDate, priority, state, tags, notes
     }
     const coleccion = collection(db, "Users")
     const documento = doc(coleccion, userid)
