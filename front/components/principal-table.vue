@@ -20,7 +20,7 @@
           <v-btn icon>
             <v-icon>mdi-plus</v-icon>
           </v-btn>
-          <span>{{ header.text }}</span>
+          <span class="header-text">{{ header.text }}</span>
         </div>
       </template>
       <template #[`header.tags`]="{ header }">
@@ -28,7 +28,7 @@
           <v-btn icon>
             <v-icon>mdi-plus</v-icon>
           </v-btn>
-          <span>{{ header.text }}</span>
+          <span class="header-text">{{ header.text }}</span>
         </div>
       </template>
     </v-data-table>
@@ -109,6 +109,10 @@ export default {
 .header-button {
   display: flex;
   align-items: center;
+}
+
+.header-text {
+  margin-left: 18px; /* Ajusta el espacio entre el botón y el texto del encabezado */
 }
 
 .add-task-button {
