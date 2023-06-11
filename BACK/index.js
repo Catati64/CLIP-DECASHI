@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const cors = require ('cors')
 const { getFirestore, collection, setDoc, getDoc, doc, getDocs, updateDoc, deleteDoc, addDoc, Timestamp, query, where, orderBy} = require('firebase/firestore')
 const { initializeApp } = require('firebase/app')
+const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth')
 
 require('dotenv/config')
 
@@ -20,6 +21,9 @@ const firebaseConfig = {
 const firebase = initializeApp(firebaseConfig)
 const db = getFirestore()
 
+// Initialize FireAuth
+const auth = getAuth(firebase)
+
 // // Initialize server
 		const app = express()
 
@@ -35,76 +39,163 @@ app.use(cors(corsOptions))
 
 // ---------- >>>> Routes <<<< ----------
 
-// ADD USER
+// Sign Up
+app.post('/SignUp', (req, res) => {
+	const { email, password } = req.body
 
-app.post('/newuser', (req, res) => {
-	const { email, password, name, lastname, number } = req.body
 
-	if (!email || !password || !name || !lastname || !number) {
-			res.json({
-					'alert' : 'not enough data'
-			})
-			return
+	if (!email || !password) {
+		res.json({
+			'alert' : 'not enough data'
+		})
+		return
 	}
-
-			// Validaciones
-			if(name.length < 3) {
-					res.json({
-							'alert': 'Name requires min 3 characters'
-					})
-			} else if (lastname.length < 3) {
-					res.json({
-							'alert': 'Lastname requires min 3 characters'
-					})
-			} else if (!email.length) {
-					res.json({
-							'alert': 'You must enter an email'
-					})
-			} else if (password.length < 8) {
-					res.json({
-							'alert': 'The password must have a min of 8 characters'
-					})
-			} else if (!Number(number) || !number.length === 10) {
-					res.json({
-							'alert': 'Please enter a valid number'
-					})
-			} else {
-					const Users = collection(db, "Users")
-	
-					getDoc(doc(Users, email)).then(User => {
-							if(User.exists()) {
-									res.json({
-											'alert': 'The mail already exists in the DB'
-									})
-							} else {
-									bcrypt.genSalt(10, (err, salt) => {
-											bcrypt.hash(password, salt, (err, hash) => {
-													sendData = {
-															email,
-															password: hash,
-															name,
-															lastname,
-															number
-													}
-	
-													// Guardar en DB
-													setDoc(doc(Users, email), sendData).then(() => {
-															res.json({
-																	'alert': 'success'
-															})
-													}).catch((error) => {
-															res.json({
-																	'alert': error
-															})
-													})
-											})
-									})
-							}
-					})
-			}
-
+	// Validaciones
+	if (!email.length) {
+		res.json({
+			'alert': 'You must enter an email'
+		})
+	} else if (password.length < 8) {
+		res.json({
+			'alert': 'The password must have a min of 8 characters'
+		})
+	} else {
+		createUserWithEmailAndPassword(auth, email, password)
+			.then(() => {
+				res.json({
+					'alert' : 'User has been created'
+				})
+			})
+			.catch((error) => {
+				res.json({
+					'alert' : 'Error creating user '
+				})
+			})
+	}
 })
 
+// New Task
+
+app.post('/NewTask', (req, res) => {
+
+    // tenemos que recibir el valor del id a modo de string o nos da error
+    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const sendData = {
+        idtask, description, startDate, finDate, priority, state, tags, notes
+    }
+    const coleccion = collection(db, "Users")
+    const documento = doc(coleccion, userid)
+    const coleccioninner = collection(documento, "Tasks")
+    setDoc(doc(coleccioninner, idtask), sendData).then(() => {
+        res.json({
+            'alert' : 'success c:'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
+
+// Edit task
+
+app.post('/EditTask', (req, res) => {
+    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const sendData = {
+        idtask, description, startDate, finDate, priority, state, tags, notes
+    }
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    updateDoc(doc(coleccion, idtask), sendData).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
+
+// Delete Task
+
+app.post('/DeleteTask', (req, res) => {
+    const {userid, idtask} = req.body
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    deleteDoc(doc(coleccion, idproducto)).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'nonononono'
+        })
+    })
+})
+
+// Edit task state
+
+app.post('/EditTaskState', (req, res) => {
+    const {userid, idtask, state} = req.body
+    const sendData = {
+        state
+    }
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    updateDoc(doc(coleccion, idtask), sendData).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
+
+// ADD NEW STATE
+app.post('/NewState', async (req, res) => {
+    const { userid,  States } = req.body;
+  
+    try {
+      const UsersRef = doc(collection(db, 'Users'), userid );
+      const FacilRef = collection(UsersRef, 'Facilities');
+      const FacilitiesRef = doc(FacilRef, 'States');
+
+	  const StateaRef = await setDoc(FacilitiesRef, {States: States});
+	  
+	  
+  
+      // Actualizar los números de artículos vendidos en la colección 'Productos'
+      res.json({
+        'alert': 'success',
+      });
+    } catch (error) {	
+      console.error('Error al registrar la estados:', error);
+      res.status(500).json({ mensaje: 'Error al registrar la estados' });
+    }
+  });
+
+// ADD NEW TAG
+app.post('/NewTag', async (req, res) => {
+    const { userid,  Tags } = req.body;
+  
+    try {
+      const UsersRef = doc(collection(db, 'Users'), userid );
+      const FacilRef = collection(UsersRef, 'Facilities');
+      const FacilitiesRef = doc(FacilRef, 'Tags');
+
+	  const StateaRef = await setDoc(FacilitiesRef, {Tags: Tags});
+	  
+	  
+  
+      // Actualizar los números de artículos vendidos en la colección 'Productos'
+      res.json({
+        'alert': 'success',
+      });
+    } catch (error) {	
+      console.error('Error al registrar las etiquetas:', error);
+      res.status(500).json({ mensaje: 'Error al registrar las etiquetas' });
+    }
+  });
 
 // Server Port
 const PORT = process.env.PORT || 12000
