@@ -186,20 +186,44 @@ app.post('/NewState', async (req, res) => {
     const { userid,  States } = req.body;
   
     try {
-      const UsersRef = doc(collection(db, 'Users'), userid);
+      const UsersRef = doc(collection(db, 'Users'), userid );
       const FacilRef = collection(UsersRef, 'Facilities');
-  
-      // Agregar la venta a la colección 'Ventas'
-      const FacilitiesRef = await addDoc(FacilRef, States);
+      const FacilitiesRef = doc(FacilRef, 'States');
+
+	  const StateaRef = await setDoc(FacilitiesRef, {States: States});
+	  
+	  
   
       // Actualizar los números de artículos vendidos en la colección 'Productos'
       res.json({
         'alert': 'success',
-        'ventaId': FacilitiesRef.id
       });
     } catch (error) {	
-      console.error('Error al registrar la venta:', error);
-      res.status(500).json({ mensaje: 'Error al registrar la venta' });
+      console.error('Error al registrar la estados:', error);
+      res.status(500).json({ mensaje: 'Error al registrar la estados' });
+    }
+  });
+
+// ADD NEW TAG
+app.post('/NewTag', async (req, res) => {
+    const { userid,  Tags } = req.body;
+  
+    try {
+      const UsersRef = doc(collection(db, 'Users'), userid );
+      const FacilRef = collection(UsersRef, 'Facilities');
+      const FacilitiesRef = doc(FacilRef, 'Tags');
+
+	  const StateaRef = await setDoc(FacilitiesRef, {Tags: Tags});
+	  
+	  
+  
+      // Actualizar los números de artículos vendidos en la colección 'Productos'
+      res.json({
+        'alert': 'success',
+      });
+    } catch (error) {	
+      console.error('Error al registrar las etiquetas:', error);
+      res.status(500).json({ mensaje: 'Error al registrar las etiquetas' });
     }
   });
 
