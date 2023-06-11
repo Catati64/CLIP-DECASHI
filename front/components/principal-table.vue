@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -27,7 +27,7 @@
       </template>
       <template #[`header.tags`]="{ header }">
         <div class="header-button">
-          <v-btn icon>
+          <v-btn icon @click="$event => tagsDialog=true">
             <v-icon style="padding-top: 0.6em;">
               mdi-plus
             </v-icon>
@@ -41,6 +41,23 @@
         + New Task
       </v-btn>
     </div>
+    <v-dialog
+      v-model="tagsDialog"
+      max-width="500"
+      persistent
+    >
+      <v-card>
+        <v-card-title>Tags</v-card-title>
+        <v-card-text>
+          Look at me, i'm a v-card :D
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="warning" @click="$event => tagsDialog=false">
+            Cerrar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -58,7 +75,8 @@ export default {
         { text: 'Tags', value: 'tags' },
         { text: 'Notes', value: 'notes' }
       ],
-      items: []
+      items: [],
+      tagsDialog: false
     }
   },
   methods: {
