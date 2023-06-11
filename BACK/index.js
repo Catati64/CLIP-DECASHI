@@ -97,6 +97,27 @@ app.post('/NewTask', (req, res) => {
     })
 })
 
+//All's Tasks
+
+app.post('/AllsTasks', async (req, res) => {
+    const { userid } = req.body
+    try{
+      const coleccion = collection(db, "Useres")
+      const documento = doc(coleccion, userid)
+      const coleccioninner = collection(documento, "Tasks")
+      const Tasks = await getDocs(coleccioninner)
+      const Task = [];
+
+      Tasks.forEach((doc) => {
+        const dato = doc.data()
+        Task.push(dato)
+      })
+      res.status(200).json(Task)
+    } catch (error) {
+      console.error('Error al buscar productos:', error)
+    }
+  })
+
 // Edit task
 
 app.post('/EditTask', (req, res) => {
