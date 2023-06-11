@@ -1,8 +1,8 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" sm="8" md="4" align="center">
-      <v-card shaped elevation="5" width="500" color="#112031">
-        <v-card-title class="text-center">
+      <v-card width="500" color="#112031" class="loginCard">
+        <v-card-title class="justify-center">
           Login to CLIP-DECASHI
         </v-card-title>
         <v-card-text>
@@ -27,7 +27,7 @@
             <v-icon dense style="padding-right: 2%;">
               mdi-account-key
             </v-icon>
-            Ingresar
+            Login
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -77,3 +77,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.loginCard {
+  background-color: #000 !important;
+}
+.colorBtn {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+</style>

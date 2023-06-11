@@ -1,8 +1,8 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" sm="8" md="4" align="center">
-      <v-card shaped elevation="5" width="500" color="#112031">
-        <v-card-title class="text-center">
+      <v-card width="500" color="#112031" class="registerCard">
+        <v-card-title class="justify-center">
           Register to CLIP-DECASHI
         </v-card-title>
         <v-card-text>
@@ -88,3 +88,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.registerCard {
+  background-color: #000 !important;
+}
+.colorBtn {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+</style>
