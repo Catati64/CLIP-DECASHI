@@ -104,53 +104,19 @@ app.post('/SignUp', (req, res) => {
 
 })
 
-// Sign In
-app.post('/SignIn', (req, res) => {
-    const { email, password } = req.body
-    
-    if ( !email || !password) {
-        res.json({
-            'alert': 'missing data'
-        })
-    }
-    const Users = collection(db, 'Users')
-    getDoc(doc(Users, email))
-    .then((User) => {
-        if(!User.exists()){
-            res.json({ 'alert': 'unregistered mail'})
-        } else {
-            bcrypt.compare(password, User.data().password, (error, result) => {
-                if ( result ){
-                    // Para regresar datos
-                    let data = User.data()
-                    res.json({ 
-                        'alert': 'success', 
-                        name: data.name,
-                        lastname: data.lastname    
-                    })
-                } else {
-                    res.json({
-                        'alert': 'Incorrect password'
-                    })
-                }
-            })
-        }
-    })
-})
-
 // New Task
 
 app.post('/NewTask', (req, res) => {
 
     // tenemos que recibir el valor del id a modo de string o nos da error
-    const {email, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
     const sendData = {
-        description, startDate, finDate, priority, state, tags, notes
+        idtask, description, startDate, finDate, priority, state, tags, notes
     }
     const coleccion = collection(db, "Users")
-    const documento = doc(coleccion, email)
+    const documento = doc(coleccion, userid)
     const coleccioninner = collection(documento, "Tasks")
-    addDoc(coleccioninner, sendData).then(() => {
+    setDoc(doc(coleccioninner, idtask), sendData).then(() => {
         res.json({
             'alert' : 'success c:'
             })
@@ -160,6 +126,83 @@ app.post('/NewTask', (req, res) => {
         })
     })
 })
+
+// Edit task
+
+app.post('/EditTask', (req, res) => {
+    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
+    const sendData = {
+        idtask, description, startDate, finDate, priority, state, tags, notes
+    }
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    updateDoc(doc(coleccion, idtask), sendData).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
+
+// Delete Task
+
+app.post('/DeleteTask', (req, res) => {
+    const {userid, idtask} = req.body
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    deleteDoc(doc(coleccion, idproducto)).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'nonononono'
+        })
+    })
+})
+
+// Edit task state
+
+app.post('/EditTaskState', (req, res) => {
+    const {userid, idtask, state} = req.body
+    const sendData = {
+        state
+    }
+    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
+    updateDoc(doc(coleccion, idtask), sendData).then(() => {
+        res.json({
+            'alert' : 'success'
+            })
+        }).catch((error) => {
+            res.json({
+                'alert' : 'no success :c'
+        })
+    })
+})
+
+// ADD NEW STATE
+app.post('/NewState', async (req, res) => {
+    const { userid,  States } = req.body;
+  
+    try {
+      const UsersRef = doc(collection(db, 'Users'), userid);
+      const FacilRef = collection(UsersRef, 'Facilities');
+  
+      // Agregar la venta a la colección 'Ventas'
+      const FacilitiesRef = await addDoc(FacilRef, States);
+  
+      // Actualizar los números de artículos vendidos en la colección 'Productos'
+      res.json({
+        'alert': 'success',
+        'ventaId': FacilitiesRef.id
+      });
+    } catch (error) {	
+      console.error('Error al registrar la venta:', error);
+      res.status(500).json({ mensaje: 'Error al registrar la venta' });
+    }
+  });
+
 
 // Server Port
 const PORT = process.env.PORT || 12000
