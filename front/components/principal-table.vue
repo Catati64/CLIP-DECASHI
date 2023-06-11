@@ -112,7 +112,7 @@ export default {
 }
 
 .header-text {
-  margin-left: 18px; /* Ajusta el espacio entre el botón y el texto del encabezado */
+  margin-left: 4px;
 }
 
 .add-task-button {
