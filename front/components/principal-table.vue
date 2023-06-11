@@ -18,7 +18,9 @@
       <template #[`header.state`]="{ header }">
         <div class="header-button">
           <v-btn icon>
-            <v-icon>mdi-plus</v-icon>
+            <v-icon style="padding-top=0.6em;">
+              mdi-plus
+            </v-icon>
           </v-btn>
           <span class="header-text">{{ header.text }}</span>
         </div>
@@ -33,7 +35,7 @@
       </template>
     </v-data-table>
     <div class="add-task-button">
-      <v-btn block>
+      <v-btn block @click="NewTaskDialog = true">
         + New Task
       </v-btn>
     </div>
@@ -44,6 +46,7 @@
 export default {
   data () {
     return {
+      NewTaskDialog: false,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Description', value: 'description' },
