@@ -37,7 +37,7 @@
       </template>
     </v-data-table>
     <div class="add-task-button">
-      <v-btn block>
+      <v-btn block @click="NewTaskDialog = true">
         + New Task
       </v-btn>
     </div>
@@ -65,6 +65,7 @@
 export default {
   data () {
     return {
+      NewTaskDialog: false,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Description', value: 'description' },
