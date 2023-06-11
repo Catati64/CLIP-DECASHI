@@ -18,19 +18,21 @@
       <template #[`header.state`]="{ header }">
         <div class="header-button">
           <v-btn icon>
-            <v-icon style="padding-top=0.6em;">
+            <v-icon style="padding-top: 0.6em;">
               mdi-plus
             </v-icon>
           </v-btn>
-          <span class="header-text">{{ header.text }}</span>
+          <span class="header-text" style="padding-top: 1.5em;">{{ header.text }}</span>
         </div>
       </template>
       <template #[`header.tags`]="{ header }">
         <div class="header-button">
           <v-btn icon>
-            <v-icon>mdi-plus</v-icon>
+            <v-icon style="padding-top: 0.6em;">
+              mdi-plus
+            </v-icon>
           </v-btn>
-          <span class="header-text">{{ header.text }}</span>
+          <span class="header-text" style="padding-top: 1.5em;">{{ header.text }}</span>
         </div>
       </template>
     </v-data-table>
