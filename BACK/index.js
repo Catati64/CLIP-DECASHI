@@ -37,7 +37,7 @@ app.use(cors(corsOptions))
 
 // ADD USER
 
-app.post('/newuser', (req, res) => {
+app.post('/SignUp', (req, res) => {
 	const { email, password, name, lastname, number } = req.body
 
 	if (!email || !password || !name || !lastname || !number) {
@@ -104,6 +104,41 @@ app.post('/newuser', (req, res) => {
 			}
 
 })
+
+app.post('/SignIn', (req, res) => {
+    const { email, password } = req.body
+    
+    if ( !email || !password) {
+        res.json({
+            'alert': 'missing data'
+        })
+    }
+    const Users = collection(db, 'Users')
+    getDoc(doc(Users, email))
+    .then((User) => {
+        if(!User.exists()){
+            res.json({ 'alert': 'unregistered mail'})
+        } else {
+            bcrypt.compare(password, User.data().password, (error, result) => {
+                if ( result ){
+                    // Para regresar datos
+                    let data = User.data()
+                    res.json({ 
+                        'alert': 'success', 
+                        name: data.name,
+                        lastname: data.lastname    
+                    })
+                } else {
+                    res.json({
+                        'alert': 'Incorrect password'
+                    })
+                }
+            })
+        }
+    })
+})
+
+
 
 
 // Server Port
