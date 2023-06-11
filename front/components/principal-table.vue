@@ -27,7 +27,7 @@
       </template>
       <template #[`header.tags`]="{ header }">
         <div class="header-button">
-          <v-btn icon @click="$event => tagsDialog=true">
+          <v-btn icon>
             <v-icon style="padding-top: 0.6em;">
               mdi-plus
             </v-icon>
@@ -41,23 +41,6 @@
         + New Task
       </v-btn>
     </div>
-    <v-dialog
-      v-model="tagsDialog"
-      max-width="500"
-      persistent
-    >
-      <v-card>
-        <v-card-title>Tags</v-card-title>
-        <v-card-text>
-          Look at me, i'm a v-card :D
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="warning" @click="$event => tagsDialog=false">
-            Cerrar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -76,8 +59,7 @@ export default {
         { text: 'Tags', value: 'tags' },
         { text: 'Notes', value: 'notes' }
       ],
-      items: [],
-      tagsDialog: false
+      items: []
     }
   },
   methods: {
@@ -97,54 +79,48 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 /* Estilo de la tabla */
 .v-data-table.theme--light {
-  background-color: #ffffff;
-  color: #000000;
-  font-family: 'Oxanium', sans-serif;
-}
-
-/* Estilo de los encabezados */
-.v-data-table.theme--light .v-data-table-header th {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 
 /* Estilo de las filas */
 .v-data-table.theme--light tbody tr {
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #000000 !important;
 }
 
 /* Estilo de las celdas */
 .v-data-table.theme--light td {
-  color: #000000;
+  color: #000000 !important;
 }
 
 /* Estilo del chip de prioridad */
 .v-data-table.theme--light .v-chip {
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Oxanium', sans-serif;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 
 /* Estilo de los botones */
 .header-button {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .header-text {
-  margin-left: 4px;
+  margin-left: 4px !important;
 }
 
 .add-task-button {
-  margin-top: 16px;
+  margin-top: 16px !important;
 }
 
 .add-task-button .v-btn {
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Oxanium', sans-serif;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 </style>
