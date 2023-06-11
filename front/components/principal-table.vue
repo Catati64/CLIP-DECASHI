@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -27,7 +27,7 @@
       </template>
       <template #[`header.tags`]="{ header }">
         <div class="header-button">
-          <v-btn icon>
+          <v-btn icon @click="$event => tagsDialog=true">
             <v-icon style="padding-top: 0.6em;">
               mdi-plus
             </v-icon>
@@ -41,7 +41,7 @@
         + New Task
       </v-btn>
     </div>
-    <v-dialog v-model="NewTaskDialog" max-width="500px">
+    <v-dialog v-model="NewTaskDialog" max-width="500px" persistent>
       <v-card>
         <v-card-title>
           <span class="headline">Add New Task</span>
