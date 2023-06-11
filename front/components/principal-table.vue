@@ -27,7 +27,7 @@
       </template>
       <template #[`header.tags`]="{ header }">
         <div class="header-button">
-          <v-btn icon @click="$event => tagsDialog=true">
+          <v-btn icon>
             <v-icon style="padding-top: 0.6em;">
               mdi-plus
             </v-icon>
@@ -132,55 +132,49 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 /* Estilo de la tabla */
 .v-data-table.theme--light {
-  background-color: #ffffff;
-  color: #000000;
-  font-family: 'Oxanium', sans-serif;
-}
-
-/* Estilo de los encabezados */
-.v-data-table.theme--light .v-data-table-header th {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 
 /* Estilo de las filas */
 .v-data-table.theme--light tbody tr {
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #000000 !important;
 }
 
 /* Estilo de las celdas */
 .v-data-table.theme--light td {
-  color: #000000;
+  color: #000000 !important;
 }
 
 /* Estilo del chip de prioridad */
 .v-data-table.theme--light .v-chip {
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Oxanium', sans-serif;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 
 /* Estilo de los botones */
 .header-button {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .header-text {
-  margin-left: 4px;
+  margin-left: 4px !important;
 }
 
 .add-task-button {
-  margin-top: 16px;
+  margin-top: 16px !important;
 }
 
 .add-task-button .v-btn {
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Oxanium', sans-serif;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Oxanium', sans-serif !important;
 }
 
 .v-dialog.theme--dark .v-card {

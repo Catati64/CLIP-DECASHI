@@ -1,19 +1,23 @@
 <template>
-  <v-container>
-    <tablaProductos />
-  </v-container>
+  <div>
+    <headerTable />
+    <v-container>
+      <tablaProductos />
+    </v-container>
+  </div>
 </template>
 
 <script>
 
 import tablaProductos from '~/components/principal-table.vue'
+import headerTable from '~/components/principal-header.vue'
 
 export default {
   name: 'IndexPage',
   components: {
-    tablaProductos
-  },
-  layout: 'general'
+    tablaProductos,
+    headerTable
+  }
 }
 </script>
 
