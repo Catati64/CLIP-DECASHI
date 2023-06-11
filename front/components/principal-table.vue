@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* Estilo de la tabla */
 .v-data-table.theme--light {
   background-color: #ffffff !important;
