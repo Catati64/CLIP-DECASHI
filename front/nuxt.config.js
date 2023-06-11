@@ -30,6 +30,10 @@ export default {
   plugins: [
   ],
 
+  router: {
+    middleware: ['auth']
+  },
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -44,13 +48,47 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: 'AIzaSyCb2Qhp3-5TFPKvVRSpuuVze0tG_KafA6A',
+          authDomain: 'clip-decashi-a4ad4.firebaseapp.com',
+          projectId: 'clip-decashi-a4ad4',
+          storageBucket: 'clip-decashi-a4ad4.appspot.com',
+          messagingSenderId: '71394002334',
+          appId: '1:71394002334:web:c91febafff97595e44028f',
+          measurementId: 'G-60MVWW21ZL'
+        },
+        services: {
+          auth: {
+            persistence: 'local', // default
+            initialize: {
+              onAuthStateChangedAction: 'onAuthStateChangedAction',
+              subscribeManually: false
+            },
+            ssr: false
+          },
+          firestore: true,
+          storage: true
+        }
+      }
+    ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/'
+  },
+
+  // PWA module configuration: https://go.nuxtjs.dev/pwa
+  pwa: {
+    manifest: {
+      lang: 'en'
+    }
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

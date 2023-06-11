@@ -36,7 +36,6 @@ app.use(cors(corsOptions))
 // ---------- >>>> Routes <<<< ----------
 
 // ADD USER
-
 app.post('/newuser', (req, res) => {
 	const { email, password, name, lastname, number } = req.body
 
@@ -105,6 +104,7 @@ app.post('/newuser', (req, res) => {
 
 })
 
+// I'LL TRY TO ADD THE LOGIN TO THE FRONT-END
 
 // Server Port
 const PORT = process.env.PORT || 12000
