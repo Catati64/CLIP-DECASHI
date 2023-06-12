@@ -34,7 +34,7 @@
       </template>
     </v-data-table>
     <div class="add-task-button">
-      <v-btn block @click="NewTaskDialog = true">
+      <v-btn block @click="NewTaskOpen">
         + New Task
       </v-btn>
     </div>
@@ -64,8 +64,8 @@
             </v-col>
           </v-row>
           <v-select v-model="newTask.priority" label="Priority" :items="['High', 'Medium', 'Low']" />
-          <v-select v-model="newTask.state" label="State" :items="['Todo', 'In Progress', 'Done']" />
-          <v-text-field v-model="newTask.tags" label="Tags" />
+          <v-select v-model="newTask.state" label="State" :items="states" />
+          <v-select v-model="newTask.tags" label="tag" :items="tags" />
           <v-textarea v-model="newTask.notes" label="Notes" />
         </v-card-text>
         <v-card-actions>
@@ -190,6 +190,8 @@ export default {
       NewTaskDialog: false,
       EditTaskDialog: false,
       deleteTaskDialog: false,
+      states: [],
+      tags: [],
       items: []
     }
   },
@@ -204,7 +206,6 @@ export default {
       try {
         const response = await this.$axios.post('/AllsTasks', { userid })
         if (response.status === 200) {
-          console.log(response.data)
           this.items = response.data
         } else {
           console.error('Error bringing all tasks')
@@ -213,10 +214,8 @@ export default {
         console.error('error getting  all tasks', error)
       }
     },
-
     async saveTask () {
       const userid = this.$fire.auth.currentUser.uid
-      console.log(userid)
       const idtask = this.newTask.description
       const description = this.newTask.description
       const startDate = this.newTask.startDate
@@ -227,7 +226,6 @@ export default {
       const notes = this.newTask.notes
       try {
         await this.$axios.post('/NewTask', { userid, idtask, description, startDate, endDate, priority, state, tags, notes }).then((res) => {
-          console.log(res)
         })
           .catch((err) => {
             console.log(err)
@@ -237,6 +235,11 @@ export default {
       }
       this.BringAllsTasks()
       this.closeNewTask()
+    },
+    NewTaskOpen () {
+      this.NewTaskDialog = true
+      this.BringAllsTags()
+      this.BringAllsStates()
     },
     clearNewTask () {
       this.newTask = {
@@ -252,6 +255,32 @@ export default {
     closeNewTask () {
       this.NewTaskDialog = false
       this.clearNewTask()
+    },
+    async BringAllsStates () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        await this.$axios.post('/AllStates', { userid }).then((res) => {
+          for (let i = 0; i < res.data.States.length; i++) { this.states.push(res.data.States[i].State) }
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al traer estado', error)
+      }
+    },
+    async BringAllsTags () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        await this.$axios.post('/AllTags', { userid }).then((res) => {
+          for (let i = 0; i < res.data.Tags.length; i++) { this.tags.push(res.data.Tags[i].Tag) }
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al traer etiquetas', error)
+      }
     },
     getPriorityColor (priority) {
       switch (priority) {

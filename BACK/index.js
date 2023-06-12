@@ -227,7 +227,7 @@ app.post('/AllStates', async (req, res) => {
       const State = States.data()
       res.json(State)
     } catch (error) {
-      console.error('Error al buscar etiquetas:', error)
+      console.error('Error al buscar estados:', error)
     }
   })
 

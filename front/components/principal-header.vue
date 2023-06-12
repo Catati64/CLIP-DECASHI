@@ -34,7 +34,15 @@
           :headers="HeadTags"
           :items="ItemTags"
           class="elevation-1"
-        />
+        >
+          <template #[`item.actions`]="{ item }">
+            <v-btn @click="deleteTag(item)">
+              <v-icon color="red">
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </template>
+        </v-data-table>
         <v-card-actions>
           <v-btn color="warning" @click="$event => tagsDialog=false">
             Cerrar
@@ -61,7 +69,15 @@
           :headers="HeadStates"
           :items="ItemStates"
           class="elevation-1"
-        />
+        >
+          <template #[`item.actions`]="{ item }">
+            <v-btn @click="deleteState(item)">
+              <v-icon color="red">
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </template>
+        </v-data-table>
         <v-card-actions>
           <v-btn color="warning" @click="$event => statesDialog=false">
             Cerrar
@@ -87,11 +103,13 @@ export default {
   data () {
     return {
       HeadTags: [
-        { text: 'Tag', value: 'Tag' }
+        { text: 'Tag', value: 'Tag' },
+        { text: 'Delete', value: 'actions' }
       ],
       ItemTags: [],
       HeadStates: [
-        { text: 'State', value: 'State' }
+        { text: 'State', value: 'State' },
+        { text: 'Delete', value: 'actions' }
       ],
       ItemStates: [],
       tagsDialog: false,
@@ -146,6 +164,7 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+      this.statesDialog = false
     },
     async Newtag () {
       const userid = this.$fire.auth.currentUser.uid
@@ -155,6 +174,7 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+      this.tagsDialog = false
     },
 
     AddState () {
@@ -166,6 +186,14 @@ export default {
       const Tag = prompt('New Tag Name:')
       const data = { Tag }
       this.ItemTags.push(data)
+    },
+    deleteTag (item) {
+      const index = this.ItemTags.indexOf(item)
+      this.ItemTags.splice(index, 1)
+    },
+    deleteState (item) {
+      const index = this.ItemStates.indexOf(item)
+      this.ItemStates.splice(index, 1)
     }
   }
 }
