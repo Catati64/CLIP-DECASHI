@@ -118,23 +118,24 @@ app.post('/AllsTasks', async (req, res) => {
     }
   })
 
-// Edit task
-
+// Edit tasks
 app.post('/EditTask', (req, res) => {
-    const {userid, idtask, description, startDate, finDate, priority, state, tags, notes } = req.body
-    const sendData = {
-        idtask, description, startDate, finDate, priority, state, tags, notes
-    }
-    const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
-    updateDoc(doc(coleccion, idtask), sendData).then(() => {
-        res.json({
-            'alert' : 'success'
-            })
-        }).catch((error) => {
-            res.json({
-                'alert' : 'no success :c'
-        })
-    })
+  const { userid, idtask, description, startDate, endDate, priority, state, tags, notes } = req.body
+  const sendData = {
+    idtask, description, startDate, endDate, priority, state, tags, notes
+  }
+  const coleccion = collection(db, "Users")
+  const documento = doc(coleccion, userid)
+  const coleccioninner = collection(documento, "Tasks")
+  updateDoc(doc(coleccioninner, idtask), sendData).then(() => {
+      res.json({
+          'alert' : 'success c:'
+          })
+      }).catch((error) => {
+          res.json({
+              'alert' : 'no success :c'
+      })
+  })
 })
 
 // Delete Task
@@ -142,7 +143,7 @@ app.post('/EditTask', (req, res) => {
 app.post('/DeleteTask', (req, res) => {
     const {userid, idtask} = req.body
     const coleccion = collection(doc(collection(db, "Users"), userid), "Tasks")
-    deleteDoc(doc(coleccion, idproducto)).then(() => {
+    deleteDoc(doc(coleccion, idtask)).then(() => {
         res.json({
             'alert' : 'success'
             })

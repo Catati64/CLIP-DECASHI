@@ -14,6 +14,24 @@
           {{ item.priority }}
         </v-chip>
       </template>
+      <template #[`item.actions`]="{ item }">
+        <v-row>
+          <v-col cols="6">
+            <v-btn text color="primary" @click="$event => editItem(item)">
+              <v-icon>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="6">
+            <v-btn text color="error" @click="$event => deleteItem(item)">
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
     </v-data-table>
     <div class="add-task-button">
       <v-btn block @click="NewTaskDialog = true">
@@ -54,8 +72,79 @@
           <v-btn color="primary" text @click="saveTask">
             Add
           </v-btn>
-          <v-btn color="secondary" text @click="closeNewTask">
+          <v-btn color="secondary" text style="margin-left: 0.5em;" @click="closeNewTask">
             Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Edit task dialog -->
+    <v-dialog v-model="EditTaskDialog" max-width="500px" persistent>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit Task</span>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field v-model="editTask.description" label="Description" />
+          <v-row>
+            <v-col cols="6">
+              <v-menu offset-y>
+                <template #activator="{ on }">
+                  <v-text-field v-model="editTask.startDate" label="Start Date" readonly v-on="on" />
+                </template>
+                <v-date-picker v-model="editTask.startDate" no-title />
+              </v-menu>
+            </v-col>
+            <v-col cols="6">
+              <v-menu offset-y>
+                <template #activator="{ on }">
+                  <v-text-field v-model="editTask.endDate" label="End Date" readonly v-on="on" />
+                </template>
+                <v-date-picker v-model="editTask.endDate" no-title />
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-select v-model="editTask.priority" label="Priority" :items="['High', 'Medium', 'Low']" />
+          <v-select v-model="editTask.state" label="State" :items="['Todo', 'In Progress', 'Done']" />
+          <v-text-field v-model="editTask.tags" label="Tags" />
+          <v-textarea v-model="editTask.notes" label="Notes" />
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="saveEditTask">
+            Save
+          </v-btn>
+          <v-btn color="secondary" text style="margin-left: 0.5em;" @click="$event => EditTaskDialog=false">
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="deleteTaskDialog"
+      max-width="290"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete Task
+        </v-card-title>
+        <v-card-text>
+          Do you really want to delete this task?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            text
+            @click="$event => deleteTaskDialog = false"
+          >
+            Cancelar
+          </v-btn>
+          <v-btn
+            text
+            @click="$event => deleteThisTask()"
+          >
+            Aceptar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -76,7 +165,8 @@ export default {
         { text: 'Priority', value: 'priority' },
         { text: 'State', value: 'state' },
         { text: 'Tags', value: 'tags' },
-        { text: 'Notes', value: 'notes' }
+        { text: 'Notes', value: 'notes' },
+        { text: 'Actions', value: 'actions' }
       ],
       newTask: {
         description: '',
@@ -87,7 +177,19 @@ export default {
         tags: '',
         notes: ''
       },
+      editTask: {
+        description: '',
+        startDate: null,
+        endDate: null,
+        priority: null,
+        state: null,
+        tags: '',
+        notes: ''
+      },
+      deleteTask: '',
       NewTaskDialog: false,
+      EditTaskDialog: false,
+      deleteTaskDialog: false,
       items: []
     }
   },
@@ -162,9 +264,67 @@ export default {
         default:
           return ''
       }
+    },
+    editItem (item) {
+      this.editTask = item
+      this.EditTaskDialog = true
+    },
+    async saveEditTask () {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
+      const taskUpdate = {
+        userid: this.$fire.auth.currentUser.uid,
+        idtask: this.editTask.idtask,
+        description: this.editTask.description,
+        startDate: this.editTask.startDate,
+        endDate: this.editTask.endDate,
+        priority: this.editTask.priority,
+        state: this.editTask.state,
+        tags: this.editTask.tags,
+        notes: this.editTask.notes
+      }
+      await this.$axios.post('/EditTask',
+        taskUpdate,
+        config).then((res) => {
+        console.log(res)
+        this.EditTaskDialog = false
+        this.BringAllsTasks()
+      }).catch((e) => {
+        console.log(e)
+      })
+    },
+    deleteItem (item) {
+      this.deleteTask = item
+      this.deleteTaskDialog = true
+    },
+    async deleteThisTask () {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
+      const sendData = {
+        userid: this.$fire.auth.currentUser.uid,
+        idtask: this.deleteTask.idtask
+      }
+      await this.$axios.post('/DeleteTask', sendData, config)
+        .then((res) => {
+          console.log(res)
+          this.deleteTaskDialog = false
+          this.BringAllsTasks()
+        })
+        .catch((e) => {
+          console.log(e)
+        })
     }
   }
 }
+
 </script>
 
 <style scoped>
