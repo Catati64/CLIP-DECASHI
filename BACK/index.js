@@ -181,10 +181,7 @@ app.post('/NewState', async (req, res) => {
       const FacilRef = collection(UsersRef, 'Facilities');
       const FacilitiesRef = doc(FacilRef, 'States');
 
-	  const StateaRef = await setDoc(FacilitiesRef, {States: States});
-	  
-	  
-  
+	  await setDoc(FacilitiesRef, {States});
       // Actualizar los números de artículos vendidos en la colección 'Productos'
       res.json({
         'alert': 'success',
@@ -204,10 +201,7 @@ app.post('/NewTag', async (req, res) => {
       const FacilRef = collection(UsersRef, 'Facilities');
       const FacilitiesRef = doc(FacilRef, 'Tags');
 
-	  const StateaRef = await setDoc(FacilitiesRef, {Tags: Tags});
-	  
-	  
-  
+	  await setDoc(FacilitiesRef, {Tags});
       // Actualizar los números de artículos vendidos en la colección 'Productos'
       res.json({
         'alert': 'success',

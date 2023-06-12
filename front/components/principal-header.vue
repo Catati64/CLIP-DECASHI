@@ -112,6 +112,19 @@ export default {
     logOut () {
       this.$router.push('/auth/signout')
     },
+    async BringAllsStates () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        await this.$axios.post('/AllStates', { userid }).then((res) => {
+          this.ItemStates = res.data.States
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al traer etiquetas', error)
+      }
+    },
     async BringAllsTags () {
       const userid = this.$fire.auth.currentUser.uid
       try {
@@ -125,18 +138,34 @@ export default {
         console.error('Error al traer etiquetas', error)
       }
     },
-    async BringAllsStates () {
+    async NewState () {
       const userid = this.$fire.auth.currentUser.uid
-      try {
-        await this.$axios.post('/AllStates', { userid }).then((res) => {
-          this.ItemStates = res.data.States
+      const States = this.ItemStates
+      await this.$axios.post('/NewState', { userid, States }).then((res) => {
+      })
+        .catch((err) => {
+          console.log(err)
         })
-          .catch((err) => {
-            console.log(err)
-          })
-      } catch (error) {
-        console.error('Error al traer etiquetas', error)
-      }
+    },
+    async Newtag () {
+      const userid = this.$fire.auth.currentUser.uid
+      const Tags = this.ItemTags
+      await this.$axios.post('/NewTag', { userid, Tags }).then((res) => {
+      })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+
+    AddState () {
+      const State = prompt('New State Name:')
+      const data = { State }
+      this.ItemStates.push(data)
+    },
+    Addtag () {
+      const Tag = prompt('New Tag Name:')
+      const data = { Tag }
+      this.ItemTags.push(data)
     }
   }
 }

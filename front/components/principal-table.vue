@@ -3,7 +3,6 @@
     <v-data-table
       :headers="headers"
       :items="items"
-      :rows-per-page-items="[10, 20, 30]"
       class="elevation-1"
     >
       <template #[`item.priority`]="{ item }">
