@@ -39,11 +39,11 @@
           <v-btn color="warning" @click="$event => tagsDialog=false">
             Cerrar
           </v-btn>
-          <v-btn @click=" Newtag ">
+          <v-btn style="margin-left: 0.5em;" @click=" Newtag ">
             Guardar
           </v-btn>
-          <v-btn @click=" Addtag ">
-            <v-icon style="padding-right: 0.2em;">
+          <v-btn style="margin-left: 17em;" @click=" Addtag ">
+            <v-icon>
               mdi-note-plus
             </v-icon>
           </v-btn>
@@ -66,11 +66,11 @@
           <v-btn color="warning" @click="$event => statesDialog=false">
             Cerrar
           </v-btn>
-          <v-btn @click="NewState ">
+          <v-btn style="margin-left: 0.5em;" @click="NewState ">
             Guardar
           </v-btn>
-          <v-btn @click="AddState">
-            <v-icon style="padding-right: 0.2em;">
+          <v-btn style="margin-left: 17em;" @click="AddState">
+            <v-icon>
               mdi-note-plus
             </v-icon>
           </v-btn>
