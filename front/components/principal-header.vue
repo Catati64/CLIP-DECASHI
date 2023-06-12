@@ -179,13 +179,17 @@ export default {
 
     AddState () {
       const State = prompt('New State Name:')
-      const data = { State }
-      this.ItemStates.push(data)
+      if (State) {
+        const data = { State }
+        this.ItemStates.push(data)
+      }
     },
     Addtag () {
       const Tag = prompt('New Tag Name:')
-      const data = { Tag }
-      this.ItemTags.push(data)
+      if (Tag) {
+        const data = { Tag }
+        this.ItemTags.push(data)
+      }
     },
     deleteTag (item) {
       const index = this.ItemTags.indexOf(item)
