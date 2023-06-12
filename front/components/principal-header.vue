@@ -30,15 +30,22 @@
     >
       <v-card>
         <v-card-title>Tags</v-card-title>
-        <v-card-text>
-          Look at me, i'm the tags dialog :D
-        </v-card-text>
+        <v-data-table
+          :headers="HeadTags"
+          :items="ItemTags"
+          class="elevation-1"
+        />
         <v-card-actions>
           <v-btn color="warning" @click="$event => tagsDialog=false">
             Cerrar
           </v-btn>
-          <v-btn>
+          <v-btn @click=" Newtag ">
             Guardar
+          </v-btn>
+          <v-btn @click=" Addtag ">
+            <v-icon style="padding-right: 0.2em;">
+              mdi-note-plus
+            </v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -50,15 +57,22 @@
     >
       <v-card>
         <v-card-title>States</v-card-title>
-        <v-card-text>
-          Look at me, i'm the states dialog :D
-        </v-card-text>
+        <v-data-table
+          :headers="HeadStates"
+          :items="ItemStates"
+          class="elevation-1"
+        />
         <v-card-actions>
           <v-btn color="warning" @click="$event => statesDialog=false">
             Cerrar
           </v-btn>
-          <v-btn>
+          <v-btn @click="NewState ">
             Guardar
+          </v-btn>
+          <v-btn @click="AddState">
+            <v-icon style="padding-right: 0.2em;">
+              mdi-note-plus
+            </v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -66,14 +80,27 @@
   </div>
 </template>
 
+<!-- eslint-disable no-console -->
 <script>
 export default {
   name: 'HeaderMainTable',
   data () {
     return {
+      HeadTags: [
+        { text: 'Tag', value: 'Tag' }
+      ],
+      ItemTags: [],
+      HeadStates: [
+        { text: 'State', value: 'State' }
+      ],
+      ItemStates: [],
       tagsDialog: false,
       statesDialog: false
     }
+  },
+  created () {
+    this.BringAllsTags()
+    this.BringAllsStates()
   },
   methods: {
     tagsMethod () {
@@ -84,6 +111,32 @@ export default {
     },
     logOut () {
       this.$router.push('/auth/signout')
+    },
+    async BringAllsTags () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        await this.$axios.post('/AllTags', { userid }).then((res) => {
+          this.ItemTags = res.data.Tags
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al traer etiquetas', error)
+      }
+    },
+    async BringAllsStates () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        await this.$axios.post('/AllStates', { userid }).then((res) => {
+          this.ItemStates = res.data.States
+        })
+          .catch((err) => {
+            console.log(err)
+          })
+      } catch (error) {
+        console.error('Error al traer etiquetas', error)
+      }
     }
   }
 }

@@ -70,7 +70,7 @@ export default {
   data () {
     return {
       headers: [
-        { text: 'ID', value: 'id' },
+        { text: 'ID', value: 'idtask' },
         { text: 'Description', value: 'description' },
         { text: 'Start Date', value: 'startDate' },
         { text: 'End Date', value: 'endDate' },
@@ -92,7 +92,26 @@ export default {
       items: []
     }
   },
+
+  created () {
+    this.BringAllsTasks()
+  },
+
   methods: {
+    async BringAllsTasks () {
+      const userid = this.$fire.auth.currentUser.uid
+      try {
+        const response = await this.$axios.post('/AllsTasks', { userid })
+        if (response.status === 200) {
+          console.log(response.data)
+          this.items = response.data
+        } else {
+          console.error('Error bringing all tasks')
+        }
+      } catch (error) {
+        console.error('error getting  all tasks', error)
+      }
+    },
 
     async saveTask () {
       const userid = this.$fire.auth.currentUser.uid
@@ -115,6 +134,7 @@ export default {
       } catch (error) {
         console.error('Error al crear tarea', error)
       }
+      this.BringAllsTasks()
       this.closeNewTask()
     },
     clearNewTask () {

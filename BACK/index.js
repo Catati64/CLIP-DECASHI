@@ -102,7 +102,7 @@ app.post('/NewTask', (req, res) => {
 app.post('/AllsTasks', async (req, res) => {
     const { userid } = req.body
     try{
-      const coleccion = collection(db, "Useres")
+      const coleccion = collection(db, "Users")
       const documento = doc(coleccion, userid)
       const coleccioninner = collection(documento, "Tasks")
       const Tasks = await getDocs(coleccioninner)
@@ -217,6 +217,41 @@ app.post('/NewTag', async (req, res) => {
       res.status(500).json({ mensaje: 'Error al registrar las etiquetas' });
     }
   });
+
+
+// All States
+
+app.post('/AllStates', async (req, res) => {
+    const { userid } = req.body
+    try{
+      const coleccion = collection(db, "Users")
+      const documento = doc(coleccion, userid)
+      const coleccioninner = collection(documento, "Facilities")
+      const StatesRef = doc(coleccioninner, "States")
+      const States = await getDoc(StatesRef)
+      const State = States.data()
+      res.json(State)
+    } catch (error) {
+      console.error('Error al buscar etiquetas:', error)
+    }
+  })
+
+// All Tags
+
+app.post('/AllTags', async (req, res) => {
+    const { userid } = req.body
+    try{
+      const coleccion = collection(db, "Users")
+      const documento = doc(coleccion, userid)
+      const coleccioninner = collection(documento, "Facilities")
+      const TasgsRef = doc(coleccioninner, "Tags")
+      const Tags = await getDoc(TasgsRef)
+      const Tag = Tags.data()
+      res.json(Tag)
+    } catch (error) {
+      console.error('Error al buscar etiquetas:', error)
+    }
+  })
 
 // Server Port
 const PORT = process.env.PORT || 12000
