@@ -1,7 +1,7 @@
 <template>
   <div class="header" style="background-color: #fff;">
     <a href="/">
-      <img id="logo" src="../images/CDB-cut.png" class="logoLogin">
+      <img id="logo" src="../images/new-logo.png" class="logoLogin">
     </a>
     <nav class="nav-links">
       <v-btn color="#002B5B" class="button-50" @click="$event => tagsDialog=true">
@@ -214,7 +214,7 @@ html, body {
 }
 
 .logoLogin {
-    max-width: 35%;
+    max-width: 25%;
     align-content: center;
     display: flex;
     flex-direction: row;
