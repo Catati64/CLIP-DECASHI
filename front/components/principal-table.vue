@@ -216,7 +216,6 @@ export default {
     },
     async saveTask () {
       const userid = this.$fire.auth.currentUser.uid
-      const idtask = this.newTask.description
       const description = this.newTask.description
       const startDate = this.newTask.startDate
       const endDate = this.newTask.endDate
@@ -224,6 +223,16 @@ export default {
       const state = this.newTask.state
       const tags = this.newTask.tags
       const notes = this.newTask.notes
+
+      // Obtener el último ID existente en la tabla principal
+      const lastId = this.items.reduce((maxId, item) => {
+        return item.idtask > maxId ? item.idtask : maxId
+      }, -1)
+      const idnumber = parseFloat(lastId) + 1
+      console.log(idnumber)
+      // Incrementar el ID para la nueva tarea
+      const idtask = idnumber.toString()
+      console.log(idtask)
       try {
         await this.$axios.post('/NewTask', { userid, idtask, description, startDate, endDate, priority, state, tags, notes }).then((res) => {
         })
