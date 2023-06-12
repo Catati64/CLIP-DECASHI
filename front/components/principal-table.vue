@@ -65,7 +65,7 @@
           </v-row>
           <v-select v-model="newTask.priority" label="Priority" :items="['High', 'Medium', 'Low']" />
           <v-select v-model="newTask.state" label="State" :items="states" />
-          <v-select v-model="newTask.tags" label="tag" :items="tags" />
+          <v-select v-model="newTask.tags" label="Tag" :items="tags" />
           <v-textarea v-model="newTask.notes" label="Notes" />
         </v-card-text>
         <v-card-actions>
@@ -106,8 +106,8 @@
             </v-col>
           </v-row>
           <v-select v-model="editTask.priority" label="Priority" :items="['High', 'Medium', 'Low']" />
-          <v-select v-model="editTask.state" label="State" :items="['Todo', 'In Progress', 'Done']" />
-          <v-text-field v-model="editTask.tags" label="Tags" />
+          <v-select v-model="editTask.state" label="State" :items="states" />
+          <v-select v-model="editTask.tags" label="Tags" :items="tags" />
           <v-textarea v-model="editTask.notes" label="Notes" />
         </v-card-text>
         <v-card-actions>
@@ -296,6 +296,8 @@ export default {
     },
     editItem (item) {
       this.editTask = item
+      this.BringAllsTags()
+      this.BringAllsStates()
       this.EditTaskDialog = true
     },
     async saveEditTask () {
